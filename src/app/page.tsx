@@ -1,17 +1,13 @@
 'use client';
 
-import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, signOut, User } from 'firebase/auth';
 import { auth } from './Firebase/config';
 import { useState } from 'react';
 import Image from 'next/image';
 
-interface ChatMessage {
-  role: string;
-  content: string;
-}
 
 export default function Home() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -46,13 +42,15 @@ export default function Home() {
         </button>
       ) : (
         <div className="text-center space-y-3">
-          <Image 
-            src={user.photoURL}
-            alt="プロフィール画像"
-            width={80}
-            height={80}
-            className="w-20 h-20 rounded-full mx-auto"
-          />
+          {user.photoURL && (
+            <Image 
+              src={user.photoURL}
+              alt="プロフィール画像"
+              width={80}
+              height={80}
+              className="w-20 h-20 rounded-full mx-auto"
+            />
+          )}
           <div>
             <p className="font-bold text-lg">ようこそ、{user.displayName}さん！</p>
             <p className="text-gray-600">{user.email}</p>
